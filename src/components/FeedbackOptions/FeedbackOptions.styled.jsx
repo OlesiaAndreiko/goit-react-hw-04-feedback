@@ -28,7 +28,7 @@ export const Button = styled.button`
   box-shadow: 0px 0px 4px rgb(92 90 90 / 85%);
   cursor: pointer;
 
-  transition-duration: 300ms;
+  transition-duration: 500ms;
   transition-timing-function: cubic-bezier(0.39, 1.03, 0.82, 0.08);
 
   &:active {

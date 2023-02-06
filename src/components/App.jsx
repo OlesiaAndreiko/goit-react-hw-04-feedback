@@ -1,58 +1,48 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Container } from './Container/Container.styled';
 import { Heading } from './Heading/Heading';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 import { Statistics } from './Statistics/Statistics';
 import { Section } from './Section/Section.styled';
 
-
-
-export class App extends Component {
-  
-  state = {
+export const App = () => {
+  const [feedbacks, setFeedback] = useState({
     good: 0,
     neutral: 0,
     bad: 0,
-  };
+  });
 
-  handleClick = e => {
+  const handleClick = e => {
     const { name } = e.target;
-    this.setState(prevState => ({
-      [name]: prevState[name] + 1,
-    }));
+    setFeedback(prev => ({ ...prev, [name]: prev[name] + 1 }));
   };
 
-  countTotalFeedback = () => {
-    return Object.values(this.state).reduce((acc, el) => acc + el, 0);
+  const countTotalFeedback = () => {
+    return Object.values(feedbacks).reduce((acc, el) => acc + el, 0);
   };
 
-  countPositiveFeedbackPercentage = () => {
+  const countPositiveFeedbackPercentage = () => {
     return Math.round(
-      (this.state.good /
-        Object.values(this.state).reduce((acc, el) => acc + el, 0)) *
+      (feedbacks.good /
+        Object.values(feedbacks).reduce((acc, el) => acc + el, 0)) *
         100 || 0
     );
   };
 
-  render() {
-    return (
-      <Container>
-        <Section>
-          <Heading title="Please, leave feedback!" />
-          <FeedbackOptions
-            options={this.state}
-            onLeaveFeedback={this.handleClick}
-          />
-        </Section>
-        <Section>
-          <Heading title="Statistics" />
-          <Statistics
-            options={this.state}
-            total={this.countTotalFeedback()}
-            positivePercentage={this.countPositiveFeedbackPercentage()}
-          />
-        </Section>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <Section>
+        <Heading title="Please, leave feedback!" />
+        <FeedbackOptions options={feedbacks} onLeaveFeedback={handleClick} />
+      </Section>
+      <Section>
+        <Heading title="Statistics" />
+        <Statistics
+          options={feedbacks}
+          total={countTotalFeedback()}
+          positivePercentage={countPositiveFeedbackPercentage()}
+        />
+      </Section>
+    </Container>
+  );
+};
